@@ -10,4 +10,16 @@ const VOW =
 
 const outDir = process.env.OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
+
+// Self-validation: the gate requires 1–200 chars of non-whitespace
+// UTF-8 text, and the judge brief requires one single line.
+if (VOW.length < 1 || VOW.length > 200) {
+  throw new Error(`vow must be 1-200 characters, got ${VOW.length}`);
+}
+if (VOW.trim().length === 0) {
+  throw new Error("vow must not be only whitespace");
+}
+if (VOW.includes("\n") || VOW.includes("\r")) {
+  throw new Error("vow must be a single line (no newline characters)");
+}
 writeFileSync(`${outDir}/entry.txt`, VOW, "utf8");
